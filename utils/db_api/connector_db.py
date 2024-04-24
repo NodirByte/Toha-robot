@@ -13,14 +13,19 @@ def get_or_create_user(telegram_id: int):
 
 @sync_to_async
 def get_all_courses():
-    courses = models.Course.objects.all()
+    # Use Django ORM to fetch all Course objects asynchronously
+    courses = list(models.Course.objects.all())
     return courses
 
 @sync_to_async
-def get_course_lessons(course_id: int):
-    course = models.Course.objects.get(id=course_id)
-    lessons = course.lessons.all()
-    return lessons
+def get_course_lessons(course_title: str):
+    try:
+        course_id = models.Course.objects.get(title=course_title).id
+        lessons = list(models.Lesson.objects.filter(course_id=course_id))
+        return lessons
+    except models.Course.DoesNotExist:
+        return None
+    
 
 @sync_to_async
 def get_lessons():
@@ -36,3 +41,43 @@ def get_lesson_by_id(lesson_id: int):
 def get_course_by_id(course_id: int):
     course = models.Course.objects.get(id=course_id)
     return course
+
+@sync_to_async
+def get_lesson_by_title(title: str):
+    lesson = models.Lesson.objects.get(title=title)
+    return lesson
+
+@sync_to_async
+def get_gift():
+    gift = models.Gift.objects.first()
+    return gift
+
+@sync_to_async
+def get_exam_results():
+    exam_results = list(models.ResultExam.objects.all())
+    return exam_results
+
+@sync_to_async
+def get_channel_link():
+    channel_link = models.AdminInfo.objects.first().channel_link
+    return channel_link
+
+@sync_to_async
+def get_admin1():
+    admin1 = models.AdminInfo.objects.first().admin1_telegram_link
+    return admin1
+
+@sync_to_async
+def get_admin2():
+    admin2 = models.AdminInfo.objects.first().admin2_telegram_link
+    return admin2
+
+@sync_to_async
+def get_admin_description():
+    admin_description = models.AdminInfo.objects.first().admin_description
+    return admin_description    
+
+@sync_to_async
+def get_all_users():
+    users = list(models.User.objects.all())
+    return users
