@@ -27,7 +27,6 @@ from aiogram.utils import exceptions
 async def bot_start(message: types.Message):
     telegram_id = message.from_user.id
     member = await check_user_is_member(telegram_id)
-    print("Member on start:", member)
     user, created = await get_or_create_user(telegram_id)
     category_keyboard = get_category_keyboard()
     if member:
@@ -205,7 +204,6 @@ async def results_menu(message: types.Message):
     results = await get_exam_results() 
     try:
         for result in results:
-            print("Result: ", result)
             result_text = result.text
             result_path = result.exam_file.path
             with open(result_path, "rb") as file:
