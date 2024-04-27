@@ -8,6 +8,8 @@ services:
     env_file: ./.env
     volumes:
       - ./db.sqlite3:/app/db.sqlite3
+      - .:/app
+
 
   admin:
     command: python3 manage.py runserver 0.0.0.0:8000
@@ -17,6 +19,7 @@ services:
       - "80:8000"
     volumes:
       - ./db.sqlite3:/app/db.sqlite3
+      - .:/app
 
 volumes:
   db_data:
