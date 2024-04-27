@@ -6,9 +6,11 @@ from keyboards.inline.channel_inline import get_admin_inline_button, get_channel
 from states.user_states import CourseState, SearchState
 from utils.db_api.connector_db import (
     get_admin_description,
+    get_admin_image,
     get_all_courses,
     get_course_lessons,
     get_exam_results,
+    get_free_lessons_text,
     get_gift,
     get_or_create_user,
     get_lesson_by_title,
@@ -52,9 +54,10 @@ async def free_lessons_menu(message: types.Message):
             reply_markup=get_channel_inline_button(),
         )
         return
+    free_lessons_text = await get_free_lessons_text()
     await message.answer(
-        f"Darslar bo'limi:\nSiz ushbu kanal orqali arab tili kurslaridan foydalanishingiz mumkin",
-        reply_markup=free_lessons_inline_button,
+        free_lessons_text,
+        # reply_markup=free_lessons_inline_button,
     )
 
 
@@ -280,10 +283,19 @@ async def who_is_luqmonjon(message: types.Message):
             reply_markup=get_channel_inline_button(),
         )
         return
-    admin_info = await get_admin_description()
-    await message.answer(
-        admin_info
-    )
+    caption = await get_admin_description()
+    admin_image = await get_admin_image()
+    try:
+        with open(admin_image.path, "rb") as file:
+            await message.bot.send_photo(
+                telegram_id, file, caption=caption, reply_markup=get_category_keyboard()
+            )
+    except Exception as e:
+        print(f"Error sending photo: {e}")
+        await message.answer(
+            "Xatolik sodir bo'ldi. Iltimos, keyinroq urinib ko'ring.",
+            reply_markup=get_category_keyboard(),
+        )
 
 
 @dp.message_handler(text=":$-Download-$:")

@@ -78,6 +78,17 @@ def get_admin_description():
     return admin_description    
 
 @sync_to_async
+def get_admin_image():
+    admin_image = models.AdminInfo.objects.first().image
+    return admin_image
+
+@sync_to_async
 def get_all_users():
     users = list(models.User.objects.all())
     return users
+
+@sync_to_async
+def get_free_lessons_text():
+    free_lessons_text = models.FreeLessonText.objects.first().text
+    return free_lessons_text
+
