@@ -92,3 +92,8 @@ def get_free_lessons_text():
     free_lessons_text = models.FreeLessonText.objects.first().text
     return free_lessons_text
 
+@sync_to_async
+def get_free_lessons_image():
+    free_lessons_image = models.FreeLessonText.objects.first().image
+    return free_lessons_image
+

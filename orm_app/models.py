@@ -82,6 +82,7 @@ class ResultExam(models.Model):
         verbose_name_plural = 'Exams Result'
         
 class FreeLessonText(models.Model):
+    image = models.ImageField(_("Image"), upload_to="free_lesson_image/", help_text=_("Free Lesson Rasmi"))
     text = models.TextField(_("Text"), help_text=_("Free Lesson Text"))
     created_at = models.DateTimeField(auto_now_add=True, help_text='Created at', blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, help_text='Updated at', blank=True, null=True)

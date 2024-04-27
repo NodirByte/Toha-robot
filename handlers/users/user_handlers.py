@@ -10,6 +10,7 @@ from utils.db_api.connector_db import (
     get_all_courses,
     get_course_lessons,
     get_exam_results,
+    get_free_lessons_image,
     get_free_lessons_text,
     get_gift,
     get_or_create_user,
@@ -54,11 +55,19 @@ async def free_lessons_menu(message: types.Message):
             reply_markup=get_channel_inline_button(),
         )
         return
-    free_lessons_text = await get_free_lessons_text()
-    await message.answer(
-        free_lessons_text,
-        # reply_markup=free_lessons_inline_button,
-    )
+    caption = await get_free_lessons_text()
+    freelessonsimage = await get_free_lessons_image()
+    try:
+        with open(freelessonsimage.path, "rb") as file:
+            await message.bot.send_photo(
+                telegram_id, file, caption=caption, reply_markup=get_category_keyboard()
+            )
+    except Exception as e:
+        print(f"Error sending photo: {e}")
+        await message.answer(
+            "Xatolik sodir bo'ldi. Iltimos, keyinroq urinib ko'ring.",
+            reply_markup=get_category_keyboard(),
+        )
 
 
 @dp.message_handler(text="🎞 Arab tili kurslari", state=None)
